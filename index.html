@@ -1,121 +1,926 @@
 <!DOCTYPE html>
 <html lang="en-GB">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Loughborough Labour Party | Shepshed by-election, 15 October 2026</title>
-<meta name="description" content="Loughborough Labour Party. Shepshed County Council by-election on Thursday 15 October 2026: polling hours, key dates and how to get involved.">
-<style>
-  :root {
-    --red: #c4002f;
-    --red-dark: #8f0022;
-    --ink: #1c1c1c;
-    --paper: #ffffff;
-    --tint: #f6f2f2;
-    --line: #ddd3d3;
-  }
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    line-height: 1.6;
-    color: var(--ink);
-    background: var(--paper);
-  }
-  a { color: var(--red-dark); }
-  a:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
-  .wrap { max-width: 46rem; margin: 0 auto; padding: 0 1rem; }
-  header { background: var(--red); color: #fff; }
-  header .wrap { padding-top: 1rem; padding-bottom: 1rem; }
-  .brand { font-weight: 700; font-size: 1.1rem; letter-spacing: 0.02em; }
-  .brand small { display: block; font-weight: 400; font-size: 0.85rem; opacity: 0.95; }
-  .hero { background: var(--red-dark); color: #fff; }
-  .hero .wrap { padding-top: 2.5rem; padding-bottom: 2.5rem; }
-  .hero p.kicker { margin: 0 0 0.5rem; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.85rem; }
-  .hero h1 { margin: 0 0 0.75rem; font-size: clamp(1.8rem, 6vw, 2.6rem); line-height: 1.15; }
-  .hero p { margin: 0.25rem 0; font-size: 1.1rem; }
-  main .wrap { padding-top: 1.5rem; padding-bottom: 2rem; }
-  section { margin: 2rem 0; }
-  h2 { font-size: 1.4rem; margin: 0 0 0.75rem; border-left: 6px solid var(--red); padding-left: 0.6rem; }
-  .card { background: var(--tint); border: 1px solid var(--line); border-radius: 6px; padding: 1rem 1.25rem; }
-  dl { margin: 0; }
-  dt { font-weight: 700; margin-top: 0.75rem; }
-  dt:first-child { margin-top: 0; }
-  dd { margin: 0; }
-  ul { padding-left: 1.2rem; }
-  .note { font-size: 0.95rem; }
-  footer { border-top: 1px solid var(--line); background: var(--tint); font-size: 0.9rem; }
-  footer .wrap { padding-top: 1.25rem; padding-bottom: 1.5rem; }
-  .imprint { margin-top: 1rem; font-size: 0.85rem; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Loughborough Constituency Labour Party: your local Labour Party serving Loughborough, Shepshed and the Villages.">
+    <title>Loughborough Labour Party</title>
+    <style>
+        /* Modern CSS Reset and Base Styles */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            /* Labour Party Brand Colours */
+            --labour-red: #E4003B;
+            --labour-dark: #1C1C1C;
+            --labour-grey: #6F777B;
+            --white: #FFFFFF;
+            --light-bg: #F7F7F7;
+            
+            /* Typography */
+            --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --font-heading: 'Georgia', serif;
+            
+            /* Spacing */
+            --section-padding: clamp(3rem, 8vw, 6rem);
+            --container-max: 1200px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            line-height: 1.6;
+            color: var(--labour-dark);
+            background: var(--white);
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+        h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); }
+        h3 { font-size: clamp(1.25rem, 3vw, 1.75rem); }
+
+        p {
+            margin-bottom: 1rem;
+            max-width: 70ch;
+        }
+
+        a {
+            color: var(--labour-red);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        a:hover {
+            opacity: 0.8;
+        }
+
+        /* Layout */
+        .container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: var(--section-padding) 0;
+        }
+
+        section:nth-child(even) {
+            background: var(--light-bg);
+        }
+
+        /* Header / Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--labour-red);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--labour-dark);
+            font-weight: 500;
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-links a:hover {
+            border-bottom-color: var(--labour-red);
+            opacity: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-image: url('images/labour-team-group.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #C8102E;
+            color: var(--white);
+            text-align: center;
+            padding: var(--section-padding) 0;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(228, 0, 59, 0.75), rgba(200, 16, 46, 0.75));
+            z-index: 1;
+        }
+        
+        .hero .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin: 0 auto 2rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.875rem 2rem;
+            background: var(--white);
+            color: var(--labour-red);
+            border: 2px solid var(--white);
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: var(--white);
+            opacity: 1;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border-color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--labour-red);
+        }
+
+        /* Card Grid */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: var(--light-bg);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-content h3 {
+            color: var(--labour-red);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Team Member Card */
+        .team-member {
+            text-align: center;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .team-member .card-image {
+            height: 400px;
+        }
+
+        .team-member h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .team-member .role {
+            color: var(--labour-grey);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: var(--white);
+            border-left: 4px solid var(--labour-red);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .info-box h3 {
+            color: var(--labour-red);
+        }
+
+        /* Contact Information */
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .contact-item svg {
+            width: 48px;
+            height: 48px;
+            fill: var(--labour-red);
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--labour-dark);
+            color: var(--white);
+            padding: 3rem 0 1rem;
+            text-align: center;
+        }
+
+        footer a {
+            color: var(--white);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .footer-section h4 {
+            color: var(--labour-red);
+            margin-bottom: 1rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 0.5rem;
+                font-size: 0.85rem;
+            }
+            
+            .nav-links a {
+                padding: 0.5rem 0.25rem;
+            }
+            
+            .logo {
+                font-size: 1.2rem;
+            }
+            
+            .hero {
+                min-height: 40vh;
+            }
+            
+            section {
+                padding: 2rem 0;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .nav-links {
+                gap: 0.25rem;
+                font-size: 0.75rem;
+            }
+            
+            .nav-links a {
+                padding: 0.5rem 0.15rem;
+            }
+            
+            .logo {
+                font-size: 1rem;
+            }
+        }
+
+        /* Video Container */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            margin: 2rem 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Utilities */
+        .text-center { text-align: center; }
+        .text-red { color: var(--labour-red); }
+        .mt-2 { margin-top: 2rem; }
+        .mb-2 { margin-bottom: 2rem; }
+
+        /* ---- additions Oct 2026 ---- */
+        html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+        .alert { background: var(--labour-dark); color: var(--white); text-align: center; padding: 0.9rem 0; }
+        .alert strong { color: #fff; border-bottom: 2px solid var(--labour-red); }
+        section.alt { background: var(--light-bg); }
+        .narrow { max-width: 820px; }
+        .narrow p { margin-bottom: 1.1rem; }
+        .lead { font-size: 1.2rem; }
+        .signoff { margin-top: 1.5rem; padding-left: 1rem; border-left: 4px solid var(--labour-red); }
+        .mp-grid { display: grid; grid-template-columns: minmax(220px, 340px) 1fr; gap: 2.5rem; align-items: start; margin-top: 2rem; }
+        .mp-photo { margin: 0; }
+        .mp-photo img { width: 100%; height: auto; display: block; border-radius: 6px; border-bottom: 6px solid var(--labour-red); }
+        .mp-text p { margin-bottom: 1rem; }
+        .role-line { color: var(--labour-grey); font-weight: 600; }
+        .mp-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.5rem 0; }
+        .btn-solid { background: var(--labour-red); color: var(--white); border-color: var(--labour-red); }
+        .btn-solid:hover { background: var(--labour-dark); border-color: var(--labour-dark); color: var(--white); }
+        .btn-ghost { background: transparent; color: var(--labour-red); border-color: var(--labour-red); }
+        .btn-ghost:hover { background: var(--labour-red); color: var(--white); }
+        .mp-contact, .social { list-style: none; margin: 0 0 1rem; padding: 0; }
+        .mp-contact li { margin-bottom: 0.35rem; }
+        .social { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+        .card-image.noimg { display: flex; align-items: center; justify-content: center; background: var(--light-bg); color: var(--labour-grey); font: 700 2.5rem var(--font-heading); }
+        .social-icons { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .social-icons a { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; border: 2px solid currentColor; transition: background 0.2s, color 0.2s; }
+        .social-icons svg { width: 22px; height: 22px; fill: currentColor; }
+        footer .social-icons a { color: var(--white); }
+        footer .social-icons a:hover, footer .social-icons a:focus-visible { background: var(--white); color: var(--labour-dark); }
+        #contact .social-icons { justify-content: center; margin-top: 2rem; }
+        #contact .social-icons a { color: var(--labour-red); }
+        #contact .social-icons a:hover, #contact .social-icons a:focus-visible { background: var(--labour-red); color: var(--white); }
+        #contact .follow { text-align: center; margin: 2.5rem auto 0; font-weight: 600; }
+        .footer-bottom p { margin-left: auto; margin-right: auto; }
+        footer .footer-section p { line-height: 1.7; }
+        footer p { font-size: 0.9rem; }
+        .footer-bottom { text-align: center; }
+        @media (max-width: 768px) { .mp-grid { grid-template-columns: 1fr; } .mp-photo { max-width: 340px; margin: 0 auto; } }
+        @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    </style>
 </head>
 <body>
+    <!-- Navigation -->
+    <header>
+        <nav class="container">
+            <div class="logo">Loughborough Labour</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#welcome">Welcome</a></li>
+                <li><a href="#mp">Your MP</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#team">Our Team</a></li>
+                <li><a href="#news">News</a></li>
+                <li><a href="#history">History</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
-<header>
-  <div class="wrap">
-    <div class="brand">Loughborough Labour Party
-      <small>Loughborough, Shepshed and the Villages</small>
-    </div>
-  </div>
-</header>
-
-<div class="hero">
-  <div class="wrap">
-    <p class="kicker">Leicestershire County Council by-election</p>
-    <h1>Shepshed by-election<br>Thursday 15 October 2026</h1>
-    <p>Polls open 7am to 10pm.</p>
-    <p>Labour candidate: <strong>Jane Lennie</strong></p>
-  </div>
-</div>
-
-<main>
-  <div class="wrap">
-
-    <section aria-labelledby="candidate">
-      <h2 id="candidate">Your Labour candidate</h2>
-      <p>Jane Lennie was born and brought up in Shepshed and is the Labour councillor for Shepshed West on Charnwood Borough Council. She is standing in the Shepshed division of Leicestershire County Council.</p>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Hope, Delivered Locally</h1>
+            <p>Your local Labour Party serving Loughborough, Shepshed and the Villages</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="#contact" class="btn">Get Involved</a>
+                <a href="#about" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
     </section>
 
-    <section aria-labelledby="dates">
-      <h2 id="dates">Key dates</h2>
-      <div class="card">
-        <dl>
-          <dt>Thursday 15 October 2026, 7am to 10pm</dt>
-          <dd>Polling day.</dd>
-          <dt>Thursday 15 October 2026, 5pm</dt>
-          <dd>Deadline for emergency proxy applications.</dd>
-        </dl>
-      </div>
-      <p class="note">The deadline to register to vote was midnight on Tuesday 29 September. If you are unsure whether you are registered, contact the elections team at Charnwood Borough Council: <a href="mailto:elections@charnwood.gov.uk">elections@charnwood.gov.uk</a>.</p>
-      <p class="note">Official information, including the notice of election and the statement of persons nominated, is on the <a href="https://www.charnwood.gov.uk/pages/elections_coming_up">Charnwood Borough Council elections page</a>. Check the current photo ID requirements for voting in person on the <a href="https://www.electoralcommission.org.uk/voting-and-elections/voter-id">Electoral Commission website</a>.</p>
+
+
+    <aside class="alert" role="note">
+        <div class="container">
+            <strong>Congratulations to Jane Lennie,</strong>
+            elected to Leicestershire County Council for the Shepshed Division on 15 October 2026.
+        </div>
+    </aside>
+
+    <!-- Welcome Section -->
+    <section id="welcome" class="alt">
+        <div class="container narrow">
+            <h2 class="text-center">Welcome</h2>
+            <p class="lead">Welcome to the Loughborough constituency Labour Party website. We are an active and lively CLP, with regular campaigning, fundraising and social gatherings across our five branches in town, Shepshed and the Villages.</p>
+            <p>Loughborough is a bellwether seat, with a long history of sending Labour representatives to Westminster, and since 2024 we have been lucky to have Jeevun Sandher as our fifth Labour member of parliament.</p>
+            <p>Labour has led Charnwood Borough Council since 2023, running a minority administration with 20 councillors across the borough, 14 of them in Loughborough. We also have three representatives on Leicestershire County Council.</p>
+            <p>We are also proud to be the custodians of Unity House, a historic building in Loughborough town centre which was gifted to the Labour Party in 1947. Unity House is available for hire, and is regularly used by a number of community groups.</p>
+            <p>We are a diverse and accepting bunch and regularly welcome new members. If you would like to join us; would like to hire Unity House; or if you need any help or assistance, please don't hesitate to contact us at <a class="em" href="#contact" data-e="Y2xwLXNlY3JldGFyeUBsYm9yb2xhYi51aw==" data-fill="1">email</a> or <a href="tel:01509239659">01509 239 659</a>.</p>
+            <p class="signoff"><strong>Rhys Cory-Lowsley</strong><br>Chairman, Loughborough Constituency Labour Party</p>
+        </div>
     </section>
 
-    <section aria-labelledby="help">
-      <h2 id="help">Get involved</h2>
-      <p>We are always glad of help, whether that is a couple of hours delivering leaflets or a day on the doorstep. Get in touch and we will find something that suits you.</p>
-      <ul>
-        <li>Email: <a href="mailto:clp-secretary@lborolab.uk">clp-secretary@lborolab.uk</a></li>
-        <li>Telephone: <a href="tel:01509239659">01509 239659</a></li>
-        <li>Address: Unity House, 21 Fennel Street, Loughborough LE11 1UQ (<a href="https://www.google.com/maps/search/?api=1&amp;query=21+Fennel+Street+Loughborough+LE11+1UQ">map</a>)</li>
-      </ul>
+    <!-- MP Section -->
+    <section id="mp">
+        <div class="container">
+            <h2 class="text-center">Your MP</h2>
+            <div class="mp-grid">
+                <figure class="mp-photo">
+                    <img loading="lazy" src="images/jeevun-sandher.jpg" alt="Dr Jeevun Sandher MP" width="450" height="675">
+                </figure>
+                <div class="mp-text">
+                    <h3 class="text-red">Dr. Jeevun Sandher MP</h3>
+                    <p class="role-line">Member of Parliament (MP) for Loughborough, Shepshed, and the Villages</p>
+                    <p>I&rsquo;m the MP for Loughborough, Shepshed and the Villages, serving since my election in July 2024.</p>
+                    <p>I&rsquo;m an economist, and I&rsquo;ve focused on understanding how to create prosperity for everyone. I learnt my trade in the Treasury, advising on macroeconomic policy and social security. I spent two years working inside the Somaliland government, leading efforts to tackle poverty in one of the poorest nations in the world.</p>
+                    <p>I was selected in 2022 to be the Labour candidate for Loughborough, and so my campaign began. Thank you to everyone in the Labour Party in Loughborough who worked so hard to help me with this.</p>
+                    <p>Now, as your MP, I am working in Parliament and at home to make life more affordable, unite our community against those who seek to divide us, and deliver the change we promised. I am working on a range of local issues, with five key priorities: bringing investment here, improving access to GP and health services, reducing crime and anti-social behaviour, supporting transport services, and flood prevention.</p>
+                    <p>I also serve as a Parliamentary Private Secretary (PPS) in the Department for Energy Security and Net Zero (DESNZ), meaning I support the Department&rsquo;s work in Government.</p>
+                    <div class="mp-links">
+                        <a class="btn btn-solid" href="https://jeevunsandher.mp/surgeries" rel="noopener">Book a surgery appointment</a>
+                        <a class="btn btn-ghost" href="https://jeevunsandher.mp" rel="noopener">jeevunsandher.mp</a>
+                    </div>
+                    <ul class="mp-contact">
+                        <li><strong>Email:</strong> <a href="mailto:jeevun.sandher.mp@parliament.uk">jeevun.sandher.mp@parliament.uk</a></li>
+                        <li><strong>Phone:</strong> <a href="tel:01509351051">01509 351051</a></li>
+                    </ul>
+                    <ul class="social">
+                        <li><a href="https://www.facebook.com/JeevunSandherLabour" rel="noopener">Facebook</a></li>
+                        <li><a href="https://www.instagram.com/jeevunsandhermp" rel="noopener">Instagram</a></li>
+                        <li><a href="https://x.com/JeevunSandher" rel="noopener">X</a></li>
+                        <li><a href="https://bsky.app/profile/jeevunsandher.bsky.social" rel="noopener">Bluesky</a></li>
+                        <li><a href="https://jeevunsandher.substack.com" rel="noopener">Substack</a></li>
+                        <li><a href="https://www.tiktok.com/@jeevunsandher" rel="noopener">TikTok</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <section aria-labelledby="site">
-      <h2 id="site">Our full website</h2>
-      <p>We are moving to a new website. This page is a temporary placeholder while that work is finished. Thank you for your patience.</p>
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <h2 style="text-align: center;">About Loughborough Labour Party</h2>
+            <p>We are committed to delivering fair, accessible services for all residents. Both County and Borough Councils have faced, and are still facing, huge levels of cuts to their funding from central government.</p>
+            
+            <p>We're delighted to have picked up new seats across the borough, in Loughborough Southfields, Woodthorpe, Barrow, Mountsorrel, Birstall East &amp; Wanlip and Shepshed. We thank residents for putting their faith in us to represent them in both these areas and the wards in which we have held our previous seats.</p>
+            
+            <p>This result comes at a crucial time for Charnwood. We recognise the challenges facing the community. We are ready to represent the needs of the people of Charnwood and promote policies that will create a better future for all. We are looking forward to achieving our goals of making Charnwood a greener, more equal and sustainable community.</p>
+        </div>
     </section>
 
-  </div>
-</main>
+    <!-- Team Section -->
+    <section id="team">
+        <div class="container">
+            <h2 class="text-center">Your Labour Team</h2>
+            <p class="text-center">Meet your dedicated Labour councillors working hard for our community on Charnwood Borough Council.</p>
+            <p class="text-center">Labour forms the minority administration with 20 of 52 council seats.</p>
+            
+            <h3 class="text-center text-red mt-2">Cabinet Members</h3>
+            <p class="text-center">Our leadership team setting the strategic direction for Charnwood</p>
+            
+            <div class="card-grid">
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic.jpg" alt="Councillor Jewel Miah" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Jewel Miah</h3>
+                        <p class="role">Leader of the Council</p>
+                        <p style="font-size: 0.9rem; color: var(--labour-grey);">Loughborough East</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5qZXdlbC5taWFoQGNoYXJud29vZC5nb3YudWs=">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-1.jpg" alt="Councillor Jenni Tillotson" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Jenni Tillotson</h3>
+                        <p class="role">Deputy Leader</p>
+                        <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">Cabinet Lead: Housing, Economic Development, Regeneration and Town Centres</p>
+                        <p style="font-size: 0.9rem; color: var(--labour-grey);">Loughborough Storer</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5qZW5uaS50aWxsb3Rzb25AY2hhcm53b29kLmdvdi51aw==">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-2.jpg" alt="Councillor Colin Hamilton" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Colin Hamilton</h3>
+                        <p class="role">Mayor of Charnwood</p>
+                        <p style="font-size: 0.9rem; color: var(--labour-grey);">Loughborough East</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5jb2xpbi5oYW1pbHRvbkBjaGFybndvb2QuZ292LnVr">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-3.jpg" alt="Councillor Ian Ashcroft" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Ian Ashcroft</h3>
+                        <p class="role">Cabinet Lead</p>
+                        <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">Finance, Property and Assets, Revenues and Benefits</p>
+                        <p style="font-size: 0.9rem; color: var(--labour-grey);">Loughborough Ashby</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5pYW4uYXNoY3JvZnRAY2hhcm53b29kLmdvdi51aw==">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-4.jpg" alt="Councillor Liz Blackshaw" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Liz Blackshaw</h3>
+                        <p class="role">Cabinet Lead</p>
+                        <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">Communities and Neighbourhoods<br>Armed Forces Champion</p>
+                        <p style="font-size: 0.9rem; color: var(--labour-grey);">Mountsorrel</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5saXouYmxhY2tzaGF3QGNoYXJud29vZC5nb3YudWs=">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-5.jpg" alt="Councillor Anne Gray" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Anne Gray</h3>
+                        <p class="role">Cabinet Lead</p>
+                        <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">Waste, Open Spaces and Leisure Facilities</p>
+                        <p style="font-size: 0.9rem; color: var(--labour-grey);">Loughborough Outwoods &amp; Shelthorpe</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5hbm5lLmdyYXlAY2hhcm53b29kLmdvdi51aw==">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-6.jpg" alt="Councillor Beverley Gray" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Beverley Gray</h3>
+                        <p class="role">Cabinet Lead</p>
+                        <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">Climate Action and Net Zero</p>
+                        <p style="font-size: 0.9rem; color: var(--labour-grey);">Loughborough Outwoods &amp; Shelthorpe</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5iZXZlcmxleS5ncmF5QGNoYXJud29vZC5nb3YudWs=">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-7.jpg" alt="Councillor Kanchan Jadeja" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Kanchan Jadeja</h3>
+                        <p class="role">Cabinet Lead</p>
+                        <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">Customer Experience, Equality and Diversity</p>
+                        <p style="font-size: 0.9rem; color: var(--labour-grey);">Dishley, Hathern &amp; Thorpe Acre</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5rYW5jaGFuLmphZGVqYUBjaGFybndvb2QuZ292LnVr">Contact</a></p>
+                    </div>
+                </div>
 
-<footer>
-  <div class="wrap">
-    <p><strong>Loughborough Constituency Labour Party</strong><br>
-    Unity House, 21 Fennel Street, Loughborough LE11 1UQ</p>
-    <p class="imprint">Promoted by The Labour Party on behalf of Loughborough Constituency Labour Party, both at Unity House, 21 Fennel Street, Loughborough LE11 1UQ.</p>
-  </div>
-</footer>
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/worrall.jpg" alt="Councillor Birgitta Worrall" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Birgitta Worrall</h3>
+                        <p class="role">Cabinet Lead</p>
+                        <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">Planning</p>
+                        <p style="font-size: 0.9rem; color: var(--labour-grey);">Loughborough Woodthorpe</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Q2xsci5CaXJnaXR0YS5Xb3JyYWxsQGNoYXJud29vZC5nb3YudWs=">Contact</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-center text-red mt-2">Labour Councillors</h3>
+            <div class="card-grid">
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-8.jpg" alt="Councillor Julie Bradshaw" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Dr Julie Bradshaw MBE</h3>
+                        <p class="role">Loughborough Ashby</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5qdWxpZS5icmFkc2hhd0BjaGFybndvb2QuZ292LnVr">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-9.jpg" alt="Councillor Rhys Cory-Lowsley" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Rhys Cory-Lowsley</h3>
+                        <p class="role">Loughborough Southfields</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5yaHlzLmNvcnktbG93c2xleUBjaGFybndvb2QuZ292LnVr">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-10.jpg" alt="Councillor Claire Forrest" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Claire Forrest</h3>
+                        <p class="role">Barrow upon Soar</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5jbGFpcmUuZm9ycmVzdEBjaGFybndvb2QuZ292LnVr">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-11.jpg" alt="Councillor Sandie Forrest" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Sandie Forrest</h3>
+                        <p class="role">Loughborough Storer</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5zYW5kaWUuZm9ycmVzdEBjaGFybndvb2QuZ292LnVr">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-12.jpg" alt="Councillor Sarah Goode" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Sarah Goode</h3>
+                        <p class="role">Loughborough Southfields</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5zYXJhaC5nb29kZUBjaGFybndvb2QuZ292LnVr">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-13.jpg" alt="Councillor Jane Lennie" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Jane Lennie</h3>
+                        <p class="role">Shepshed West</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5qYW5lLmxlbm5pZUBjaGFybndvb2QuZ292LnVr">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-14.jpg" alt="Councillor Sarah Maynard" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Sarah Maynard</h3>
+                        <p class="role">Loughborough Outwoods &amp; Shelthorpe</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5zYXJhaC5tYXluYXJkQGNoYXJud29vZC5nb3YudWs=">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-15.jpg" alt="Councillor Julie Palmer" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Julie Palmer</h3>
+                        <p class="role">Birstall East &amp; Wanlip</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5qdWxpZS5wYWxtZXJAY2hhcm53b29kLmdvdi51aw==">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-16.jpg" alt="Councillor Myriam Roberts" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Myriam Roberts</h3>
+                        <p class="role">Shepshed East</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5teXJpYW0ucm9iZXJ0c0BjaGFybndvb2QuZ292LnVr">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-17.jpg" alt="Councillor Nathaniel Taylor" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Nathaniel Taylor</h3>
+                        <p class="role">Loughborough Ashby</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5uYXQudGF5bG9yQGNoYXJud29vZC5nb3YudWs=">Contact</a></p>
+                    </div>
+                </div>
+                
+                <div class="card team-member">
+                    <img loading="lazy" src="images/councillors/bigpic-18.jpg" alt="Councillor Louise Granger" class="card-image">
+                    <div class="card-content">
+                        <h3>Cllr Louise Granger</h3>
+                        <p class="role">Loughborough East</p>
+                        <p style="font-size: 0.85rem;"><a href="#contact" class="em" data-e="Y2xsci5sb3Vpc2UuZ3JhbmdlckBjaGFybndvb2QuZ292LnVr">Contact</a></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-box mt-2">
+                <h3>County Councillors</h3>
+                <p>Several of our Borough Councillors also serve on Leicestershire County Council:</p>
+                <ul style="margin-left: 2rem;">
+                    <li><strong>Cllr Jewel Miah</strong> - Loughborough East (County &amp; Borough)</li>
+                    <li><strong>Cllr Beverley Gray</strong> - Loughborough South West (County &amp; Borough)</li>
+                    <li><strong>Cllr Jane Lennie</strong> - Shepshed (County &amp; Borough)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section id="news">
+        <div class="container">
+            <h2 class="text-center">Latest News</h2>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <div class="card-content">
+                        <h3>Jane Lennie elected for Shepshed</h3>
+                        <p>Jane Lennie has been elected to Leicestershire County Council for the Shepshed Division, winning the by-election held on Thursday 15 October 2026 with 1,163 votes and a majority of 53. Turnout was 29.65%.</p>
+                        <p>The declared result: Jane Lennie (Labour) 1,163; Stuart Wood (Reform UK) 1,110; Sarah Monk (Conservative) 819; Alexander McKenzie (Restore Britain) 228; Katherine Brookes-Duncan (Liberal Democrats) 115; David Kellock (Green Party) 112.</p>
+                        <p>Thank you to everyone in Shepshed who voted, and to the volunteers who delivered, knocked doors and made calls. Jane remains a Charnwood Borough councillor for Shepshed West. If you would like to help with our future campaigns, get in touch using the details below.</p>
+                        <p><a href="#contact" class="btn btn-solid">Get in touch</a></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <h3>Help create a pelican crossing at the Aldi roundabout</h3>
+                        <p>Residents have shared concerns about the safety of pedestrians and cyclists as they try to cross the busy junction of Allendale Road, Ling Road and Main Street, next to the Aldi roundabout. This is a route widely used by school children, and Cllr Beverley Gray feels it urgently needs a pelican crossing to keep pedestrians and cyclists safe.</p>
+                        <p>She has repeatedly asked the County Council to look at ways to improve safety at the roundabout, and now needs your support to add pressure for a crossing. The petition will be presented as evidence of public support for the proposal.</p>
+                        <p><a href="https://www.change.org/CrossingonAldiroundabout" class="btn btn-solid" target="_blank" rel="noopener">Sign the petition</a></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <h3>Your Charnwood Borough Council Labour Group</h3>
+                        <p>Following recent elections, our Labour group continues to work hard representing residents across Charnwood. We recognise the challenges facing the community and are ready to represent the needs of the people of Charnwood.</p>
+                        <p>We are looking forward to achieving our goals of making Charnwood a greener, more equal and sustainable community.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-content">
+                        <h3>Get Involved</h3>
+                        <p>Want to make a difference in your community? We're always looking for committed people to join our team. Whether you can spare a few hours a month or want to get more involved, there's a role for you.</p>
+                        <p><a href="#contact" class="btn">Contact Us</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- History Section -->
+    <section id="history">
+        <div class="container">
+            <h2>Unity House: Our Local Labour History</h2>
+            
+            <div class="info-box">
+                <h3>The Building</h3>
+                <p>During the 19th Century a number of friendly societies sprang up to provide medical cover and insurance for working people who would otherwise be unable to afford it. Loughborough Medical Aid Centre was thus built. It was originally a hospital, pharmacy and medical hall built for a number of Loughborough Friendly Societies, including the Ancient Order of Foresters, the Rechabites, the Druids and the Oddfellows.</p>
+                
+                <p>At the back of the downstairs room was a surgery and at the front was a dispensary. There were sick wards on the first floor with bed bays and a nurse. Some patients were even operated on there in the early days. It continued to be used as a hospital until circa 1925.</p>
+            </div>
+
+            <div class="info-box">
+                <h3>A Hub of Political Activity</h3>
+                <p>The building subsequently had numerous uses including a hall for Gilbert and Sullivan concerts by the Loughborough Hospital Pageant Operatic Society. When Tony Mulhearn took the building on and set up his Chartered Accountancy practice in the mid 1960s, it was in a sorry state, though the dispensing room was still there.</p>
+                
+                <p>Dr David Owen even used the building to launch his new SDP party under the cameras of Newsnight with Vincent Hannah. Although the building has been used as the headquarters of Loughborough Labour Party since 1947, its use has now widened to other community groups. During the 1990s there was even a bar. It is not clear what the Rechabites would have thought of that.</p>
+            </div>
+
+            <div class="info-box">
+                <h3>Unity House: A Visual History</h3>
+                <p>Watch this video to see Unity House and learn more about its fascinating history:</p>
+                <div class="video-container">
+                    <iframe src="https://www.youtube-nocookie.com/embed/rvFHNjDWmDY" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" title="Unity House History Video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="">
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3>Booking Unity House</h3>
+                <p>Unity House is a handsome Victorian building located near the centre of Loughborough at <strong>21 Fennel Street, Loughborough LE11 1UQ</strong>. It is the home of the Loughborough Constituency Labour Party and serves as a meeting place for the Labour Party and other community activities.</p>
+                
+                <p>For room bookings and availability, please email <a href="#contact" class="em" data-e="Y2xwLXNlY3JldGFyeUBsYm9yb2xhYi51aw==" data-fill="1">email</a> or call 01509 239659.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <h2 class="text-center">Get In Touch</h2>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path>
+                    </svg>
+                    <h3>Address</h3>
+                    <p>Unity House<br>
+                    21 Fennel Street<br>
+                    Loughborough LE11 1UQ</p>
+                    <a href="https://www.google.com/maps/search/?api=1&amp;query=21+Fennel+Street+Loughborough+LE11+1UQ" target="_blank">View on Google Maps</a>
+                </div>
+
+                <div class="contact-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"></path>
+                    </svg>
+                    <h3>Telephone</h3>
+                    <p><a href="tel:01509239659">01509 239659</a></p>
+                </div>
+
+                <div class="contact-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path>
+                    </svg>
+                    <h3>Email</h3>
+                    <p><a class="em" href="#contact" data-e="Y2xwLXNlY3JldGFyeUBsYm9yb2xhYi51aw==" data-fill="1">email</a></p>
+                </div>
+            </div>
+
+            <p class="follow">Follow Loughborough Labour</p>
+            <ul class="social-icons">
+                        <li><a href="https://www.facebook.com/share/1ZeaUcADKW/" target="_blank" rel="noopener" aria-label="Loughborough Labour on Facebook (opens in a new tab)" title="Facebook"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"></path></svg></a></li>
+                        <li><a href="https://www.tiktok.com/@lborolabourparty" target="_blank" rel="noopener" aria-label="Loughborough Labour on TikTok (opens in a new tab)" title="TikTok"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"></path></svg></a></li>
+                        <li><a href="https://bsky.app/profile/lborolabour.bsky.social" target="_blank" rel="noopener" aria-label="Loughborough Labour on Bluesky (opens in a new tab)" title="Bluesky"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.478 0-.69-.139-1.861-.902-2.206-.659-.298-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8Z"></path></svg></a></li>
+                    </ul>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Loughborough Labour</h4>
+                    <p>Loughborough Constituency Labour Party<br>Unity House, 21 Fennel Street<br>Loughborough LE11 1UQ</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Telephone: <a href="tel:01509239659">01509 239 659</a><br>Email: <a class="em" href="#contact" data-e="Y2xwLXNlY3JldGFyeUBsYm9yb2xhYi51aw==" data-fill="1">email</a></p>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow us</h4>
+                    <ul class="social-icons">
+                        <li><a href="https://www.facebook.com/share/1ZeaUcADKW/" target="_blank" rel="noopener" aria-label="Loughborough Labour on Facebook (opens in a new tab)" title="Facebook"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"></path></svg></a></li>
+                        <li><a href="https://www.tiktok.com/@lborolabourparty" target="_blank" rel="noopener" aria-label="Loughborough Labour on TikTok (opens in a new tab)" title="TikTok"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"></path></svg></a></li>
+                        <li><a href="https://bsky.app/profile/lborolabour.bsky.social" target="_blank" rel="noopener" aria-label="Loughborough Labour on Bluesky (opens in a new tab)" title="Bluesky"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364.136-.02.275-.039.415-.056-.138.022-.276.04-.415.056-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078a8.741 8.741 0 0 1-.415-.056c.14.017.279.036.415.056 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.478 0-.69-.139-1.861-.902-2.206-.659-.298-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8Z"></path></svg></a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Find us</h4>
+                    <p><a href="#welcome">Welcome</a><br><a href="#mp">Your MP</a><br><a href="#team">Our team</a><br><a href="#history">Unity House</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Published by Clive Bagley for Loughborough Constituency Labour Party, Unity House, 21 Fennel Street, Loughborough LE11 1UQ.</p>
+                <p>&copy; 2026 Loughborough Constituency Labour Party</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    /* Assemble mailto links in the browser so addresses are not sitting in the page as plain text. */
+    document.querySelectorAll('a.em').forEach(function (a) {
+        try {
+            var addr = atob(a.dataset.e);
+            a.href = 'mailto:' + addr;
+            if (a.dataset.fill) { a.textContent = addr; }
+        } catch (e) {}
+    });
+    </script>
 
 </body>
 </html>
