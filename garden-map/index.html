@@ -1,0 +1,543 @@
+<title>Canalside Garden Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<style>
+/* Layout: a plan of the plot traced from the satellite view (canal at the top, street at the bottom)
+   beside a zone key and jobs list, then one plant table per zone with a confidence filter. */
+:root {
+  --bg: #f1f4f1;
+  --surface: #fbfcfb;
+  --fg: #1b2620;
+  --muted: #55665c;
+  --line: #cbd6ce;
+  --accent: #2d6a4f;
+  --water: #2f7fa8;
+  --boundary: #b4443a;
+  --c-confirmed: #2d6a4f;
+  --c-probable: #a8761a;
+  --c-guess: #c0563a;
+  --c-unknown: #62748a;
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1713;
+    --surface: #16211b;
+    --fg: #e4ece6;
+    --muted: #94a69b;
+    --line: #2b3a32;
+    --accent: #6fcf9a;
+    --water: #6bb7dc;
+    --boundary: #ef8a7a;
+    --c-confirmed: #5fcf94;
+    --c-probable: #e0b04f;
+    --c-guess: #ee8a69;
+    --c-unknown: #9fb0c4;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1713;
+  --surface: #16211b;
+  --fg: #e4ece6;
+  --muted: #94a69b;
+  --line: #2b3a32;
+  --accent: #6fcf9a;
+  --water: #6bb7dc;
+  --boundary: #ef8a7a;
+  --c-confirmed: #5fcf94;
+  --c-probable: #e0b04f;
+  --c-guess: #ee8a69;
+  --c-unknown: #9fb0c4;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; }
+h1, h2 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; }
+h1 { font-size: 2rem; line-height: 1.15; }
+h2 { font-size: 1.3rem; line-height: 1.25; }
+h3 { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; font-weight: 600; }
+p { margin: 0; }
+a { color: inherit; }
+.lede { color: var(--muted); max-width: 68ch; margin-top: 8px; }
+.top { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 32px; align-items: start; }
+figure { margin: 0; min-width: 0; }
+figcaption { color: var(--muted); font-size: 0.85rem; margin-top: 8px; max-width: 62ch; }
+svg.map { width: 100%; height: auto; display: block; color: var(--fg); }
+svg.map text { font-family: var(--font-body); fill: currentColor; }
+.ground { fill: var(--surface); stroke: var(--boundary); stroke-width: 2; stroke-dasharray: 7 4; }
+.water { fill: var(--water); fill-opacity: 0.2; }
+.road { fill: var(--muted); fill-opacity: 0.16; }
+.band-label { font-size: 12px; fill: var(--muted) !important; letter-spacing: 0.04em; }
+.nb { fill: none; stroke: var(--line); stroke-width: 1.2; stroke-dasharray: 3 3; }
+.feat { fill: var(--surface); stroke: var(--muted); stroke-width: 1.2; }
+.house { fill: var(--line); fill-opacity: 0.55; stroke: var(--muted); stroke-width: 1.4; }
+.tl { font-size: 10.5px; fill: var(--muted) !important; }
+.tlc { font-size: 10.5px; fill: var(--muted) !important; text-anchor: middle; }
+.canopy { fill: var(--c-confirmed); fill-opacity: 0.16; }
+.trellis { stroke: var(--accent); stroke-width: 4; stroke-linecap: round; }
+.post { fill: var(--accent); }
+.step { stroke: var(--muted); stroke-width: 1.4; }
+.paving { fill: var(--line); fill-opacity: 0.6; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 2; }
+.tree { fill: var(--c-confirmed); fill-opacity: 0.4; stroke: var(--c-confirmed); stroke-width: 1.2; }
+.dot-s { fill: var(--accent); }
+.rockbed { fill: var(--line); fill-opacity: 0.75; stroke: var(--muted); stroke-width: 1.2; }
+.border-bed { fill: var(--c-confirmed); fill-opacity: 0.14; stroke: var(--c-confirmed); stroke-width: 1; stroke-dasharray: 3 2; }
+.zreg { fill: var(--accent); fill-opacity: 0.1; stroke: var(--accent); stroke-width: 1.3; stroke-dasharray: 5 3; }
+a.znode:hover .zreg, a.znode:focus-visible .zreg { fill-opacity: 0.24; stroke-width: 2.2; }
+a.znode:focus-visible { outline: none; }
+.zb { fill: var(--accent); }
+.zb-t { font-size: 12px; font-weight: 600; fill: var(--bg) !important; text-anchor: middle; }
+.compass { stroke: var(--fg); stroke-width: 1.6; fill: none; }
+.compass-head { fill: var(--fg); }
+.zkeys { display: flex; flex-direction: column; gap: 8px; }
+a.zkey {
+  display: grid; grid-template-columns: 1.9em minmax(0, 1fr); gap: 2px 10px; align-items: start;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; text-decoration: none;
+}
+a.zkey:hover, a.zkey:focus-visible { border-color: var(--accent); outline: none; }
+a.zkey:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+.badge {
+  font-family: var(--font-body); font-size: 0.8rem; font-weight: 600; color: var(--bg); background: var(--accent);
+  width: 1.7em; height: 1.7em; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+}
+.zk-name { font-weight: 600; font-size: 0.95rem; line-height: 1.3; }
+.zk-asp { color: var(--muted); font-size: 0.82rem; grid-column: 2; }
+.bar { grid-column: 2; display: flex; height: 8px; border-radius: 2px; overflow: hidden; background: var(--line); margin-top: 4px; }
+.bar span { display: block; height: 100%; }
+.bar .c { background: var(--c-confirmed); } .bar .p { background: var(--c-probable); }
+.bar .g { background: var(--c-guess); } .bar .u { background: var(--c-unknown); }
+.zk-count { grid-column: 2; font-size: 0.8rem; color: var(--muted); }
+.jobs { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+.jobs ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 4px; }
+.jobs li { font-size: 0.92rem; }
+.jobs .when { border-top: 1px solid var(--line); padding-top: 12px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.filters button {
+  font: inherit; font-size: 0.85rem; color: var(--fg); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.filters button[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.filters button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; background: var(--muted); }
+.dot.c { background: var(--c-confirmed); } .dot.p { background: var(--c-probable); }
+.dot.g { background: var(--c-guess); } .dot.u { background: var(--c-unknown); }
+.dot.a { background: transparent; border: 2px solid var(--accent); }
+.legend { color: var(--muted); font-size: 0.85rem; max-width: 80ch; }
+.zone { display: flex; flex-direction: column; gap: 10px; scroll-margin-top: 16px; min-width: 0; }
+.zone-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.zone-head .asp { color: var(--muted); font-size: 0.88rem; }
+.zone-note { color: var(--muted); font-size: 0.88rem; max-width: 80ch; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+th { text-align: left; font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; min-width: 0; }
+tr:last-child td { border-bottom: 0; }
+td.what { font-weight: 500; width: 34%; }
+td.conf { white-space: nowrap; width: 1%; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 500; }
+.chip.c { color: var(--c-confirmed); } .chip.p { color: var(--c-probable); }
+.chip.g { color: var(--c-guess); } .chip.u { color: var(--c-unknown); }
+.act { display: inline-block; margin-left: 6px; font-size: 0.74rem; font-weight: 600; color: var(--accent); border: 1px solid var(--accent); border-radius: 4px; padding: 0 6px; white-space: nowrap; }
+.empty { color: var(--muted); padding: 12px; font-size: 0.9rem; }
+.open ul { margin: 0; padding-left: 1.1em; columns: 2 280px; column-gap: 32px; }
+.open li { margin-bottom: 4px; break-inside: avoid; font-size: 0.92rem; }
+.foot { color: var(--muted); font-size: 0.82rem; border-top: 1px solid var(--line); padding-top: 14px; max-width: 80ch; }
+@media (max-width: 860px) {
+  .top { grid-template-columns: minmax(0, 1fr); }
+  td.what { width: auto; }
+  h1 { font-size: 1.6rem; }
+}
+/* Handset: one column, one vertical scroll. Tables become stacked cards so nothing scrolls sideways. */
+@media (max-width: 640px) {
+  body { font-size: 15px; }
+  .wrap { gap: 26px; }
+  .tablewrap { overflow: visible; border: 0; background: none; }
+  table, tbody, tr, td { display: block; width: 100%; }
+  thead { display: none; }
+  tr { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+  td { border: 0; padding: 2px 0; }
+  td.what { font-weight: 600; width: 100%; }
+  td.conf { width: 100%; white-space: normal; padding-bottom: 4px; }
+  .open ul { columns: 1; }
+  .zkeys { gap: 10px; }
+  a.zkey { padding: 12px; }
+  .filters button { padding: 8px 12px; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Canalside Garden Map</h1>
+    <p class="lede">A plan of the plot from the street to the canal, with what is growing in each zone and how sure the identification is. Drawn from your satellite view, photos, video stills and corrections, last refreshed on 6 November 2026. Full care guidance, month by month with sources, is in the separate care plan document.</p>
+  </header>
+
+  <div class="top">
+    <figure>
+      <svg id="map" class="map" viewBox="0 0 420 1170" role="img" aria-label="Plan of the long narrow plot, rotated so the canal is at the top and the street at the bottom. From the street: front garden, house with the side passage on its left, round paving and gravel behind the house, the trellis and pergola line, then the upper terrace and canal bank under a willow and birch."></svg>
+      <figcaption>Plan traced from your satellite screenshot and rotated so the canal is at the top; the arrow shows north. Proportions follow the screenshot. The scale bar is approximate: it rests on your estimates of a garden about 10 m wide and a pergola about 7 m, which agree to within about 15%, so measure one real length to firm it up. The dashed outline is the boundary you marked. Positions inside each zone are approximate; the two dots by the arch are the standards. Select a zone to jump to its table.</figcaption>
+    </figure>
+    <aside aria-label="Zones and jobs">
+      <h3>Zones, street to canal</h3>
+      <div class="zkeys" id="zkeys"></div>
+      <div class="jobs">
+        <div class="when">
+          <h3>Before the first frost</h3>
+          <ul>
+            <li>Move the begonias and the Jerusalem cherry to bright, frost-free shelter. The aloe and echeveria are already indoors.</li>
+            <li>Bin black-spotted and fallen rose leaves (standard rose, rose in the cordyline pot).</li>
+            <li>Pin wire mesh over the bulb pots; a bulb has already been dug up.</li>
+          </ul>
+        </div>
+        <div class="when">
+          <h3>December to February</h3>
+          <ul>
+            <li>Untangle the kiwi from the cordylines, finishing by the end of January. Keep the framework on the trellis.</li>
+            <li>Renovate the old pergola rose once it is leafless: cut a few old stems low, keep up to six strong ones tied in.</li>
+            <li>Trim iris fans to about 15 cm, keep bark off the rhizomes, and cut dead hollyhock stems to the ground.</li>
+            <li>Leave the hydrangea alone until February or March: next summer's flower buds are already on it.</li>
+            <li>Cut old hellebore leaves in January or February.</li>
+            <li>Prune the two standard roses in February or March and fleece the graft unions in hard frost.</li>
+            <li>Cut the Miscanthus to 10 to 15 cm in February or March.</li>
+          </ul>
+        </div>
+        <div class="when">
+          <h3>March to April</h3>
+          <ul>
+            <li>Cut the grafted willow standard hard, to two or three buds.</li>
+            <li>Trim the Photinia-type standards.</li>
+            <li>Prune the Kilmarnock willow to 10 to 15 cm once the catkins finish.</li>
+            <li>Look for new lupin shoots; cut back verbena and fuchsia; cut the Artemisia back by half in April.</li>
+            <li>Fleece the kiwi and wisteria shoots if a late frost threatens.</li>
+          </ul>
+        </div>
+        <div class="when">
+          <h3>Spring checks that settle identifications</h3>
+          <ul>
+            <li>Leaf shape on the two maples (garage wall, by the Fatsia) and blossom on the front tree.</li>
+            <li>Scratch test the broom. Crush a leaf of the silver plant, and of the lemon balm in spring.</li>
+            <li>Flowers on the rock-bed cushions, and on the bulbs.</li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <section aria-label="Filter plants">
+    <div class="filters" id="filters" role="group" aria-label="Filter by confidence"></div>
+    <p class="legend" id="legend" style="margin-top:10px"></p>
+  </section>
+
+  <div id="zones" style="display:flex;flex-direction:column;gap:28px;width:100%;min-width:0"></div>
+
+  <section class="open">
+    <h3>Still to find out</h3>
+    <ul id="openq"></ul>
+  </section>
+
+  <p class="foot">Houseplants are left for a separate pass. Neighbours' plants are left out. Speech in the videos could not be transcribed, so anything you said without typing it is not here. Plant names in the Guess and Unidentified groups should be treated as prompts for checking, not as records.</p>
+</div>
+
+<script>
+(function () {
+  var STATUS = {
+    c: { label: "Confirmed" },
+    p: { label: "Probable" },
+    g: { label: "Guess" },
+    u: { label: "Unidentified" }
+  };
+
+  var ZONES = [
+    { id: "a", name: "Front garden", aspect: "Faces the street (south-east)",
+      note: "The gated passage at the left, the drive in front of the house, the door planters, and the rock bed with the tree and flax at the right with the campervan alongside on the boundary. The lawn tree, the flower border, the purple asters at the far right and the shrubs either side are the neighbours’.",
+      items: [
+        ["Multi-stem tree in the rock bed", "p", "The September street view and leaf close-up show simple, alternate, oval leaves with pointed tips and no lobes, turning copper-orange, so this is not a Japanese maple. Amelanchier (probably A. lamarckii) fits: spring blossom, summer berries, coppery autumn colour. Inherited with the house. Needs little pruning; remove suckers and any crossing wood in late winter."],
+        ["Phormium tenax-type (New Zealand flax)", "p", "Kept when the rockery was built round it. Your campervan parks on the boundary edge beside it and the leaves overhang the van. In spring, cut the offending leaves cleanly at the base rather than trimming the tips; stiff pointed tips can mark paintwork."],
+        
+        ["Grass-like mat of bulb foliage", "p", "Muscari or similar, your “hyacinth etc”. Flowers March to April."],
+        ["Cushions in the rock crevices", "g", "Mossy saxifrage or Erinus alpinus are candidates. You recall small purple summer flowers; a flower photo would settle it."],
+        ["Tufts growing from the rocks", "g", "Small purple summer flowers. Your reference photo (blue-grey grass-like leaves in a dense mat, magenta-pink flowers with fringed petals) points to a pink, Dianthus: possibly Cheddar pink (D. gratianopolitanus) or a maiden pink type (D. deltoides). A crushed leaf with an onion smell would mean chives instead. Deadhead after flowering and cut back lightly; needs sharp drainage."],
+        ["Hostas in the oblong door planter", "c", "Dormant. Old bulbs also come up among the crowns."],
+        ["Hellebores in two door planters", "p", "Marbled leaves, perhaps an ‘Anna’s Red’ type. The middle pot is crowded.", "Jan to Feb"],
+        
+      ] },
+    { id: "b", name: "Side passage and garage wall", aspect: "Passage runs SE to NW; garage wall faces east-ish",
+      note: "The narrow passage along the left of the house, and the pots standing against the brick garage wall with the rusty tree-of-life panel.",
+      items: [
+        ["Acer in a large black glazed pot", "p", "Japanese maple type, with a strappy plant at its base."],
+        ["Olive standard in a stone pot", "p", "The wire cloche beside it belongs to the neighbouring hosta pot, not the olive."],
+        ["Grafted standard willow, probably Salix integra ‘Hakuro-nishiki’", "g", "In the grey pot. Not a Berberis: the close-ups show a bare stem of about 1 m with a graft union, and a head of narrow, pale-veined, slightly wavy leaves on red-brown twigs. The leaves are plain green, so it may have reverted from its usual pink and white variegation. Cut the head back hard in March to two or three buds for fresh colourful growth, and remove any shoots below the graft.", "March"],
+        ["Small-leaved shrub with yellow autumn colour, black nursery pot", "g", "In front of the willow standard. Close-ups show small oval leaves, shallowly toothed near the tip, on slender reddish-purple twigs, with no thorns. It is deciduous and about to go bare. That points to a Spiraea (a dwarf S. japonica type such as ‘Little Princess’, or S. nipponica or S. thunbergii), not a Berberis. You do not recall flowers so far, so spring or summer 2027 will settle it, and a lack of flowers may just mean too little sun in the pot. Flower colour and month would settle it: pink flat heads in July or August mean japonica, which is cut hard in February or March; white May flowers mean the other two, which are pruned after flowering.", "Feb to Mar"],
+        ["Yucca gloriosa ‘Variegata’", "p", "In terracotta."],
+        ["Standard rose in a black glazed pot by the door", "u", "Variety unknown, no label or history. The close-ups show a grafted standard: a thin bare stem with a swollen graft union at the top and canes tied to a stake. Fully double, ruffled flowers, buttery yellow with salmon-pink edges, and some black-spotted leaves. The colouring resembles ‘Chinatown’ or ‘Peace’ types, which is only a guess, and nothing shows it is related to the old pergola rose. Prune in February or March to three to five buds per cane, bin spotted leaves, and fleece the graft in hard frost.", "Feb to Mar"],
+        ["Skimmia with red berries, with ferns", "p", ""],
+        ["Lemon balm in a black pot", "p", "Melissa officinalis, from your recollection. Tall dead spikes remain. Cut them to the base in late winter and check the regrowth; a crushed fresh leaf in spring will confirm the scent. Hardy, spreads freely, so keep it in the pot."],
+        ["Echeveria in the campervan pot", "p", "Now indoors."],
+        ["Hosta in a stone pot under a cloche", "c", "Dormant."]
+      ] },
+    { id: "c", name: "Patio-door corner", aspect: "Patio doors face north-west: little winter sun",
+      note: "The pots grouped outside the patio doors at the back of the house. Alocasia and aeonium are indoors and belong to the houseplant pass.",
+      items: [
+        ["Salix caprea ‘Kilmarnock’", "c", "Label read, in the grey stone square pot. Prune to 10 to 15 cm after the catkins. A single pale mushroom in the pot looked harmless.", "After catkins"],
+        ["Nordmann fir (Christmas tree) in a black pot", "p", "Abies nordmanniana, from your recollection. It looked dead in January 2026 and has partly recovered; many dry brown twigs remain, so check watering."],
+        ["Cordyline sharing a pot with a rose", "c", "Rose name unknown, with black spot on stems and leaves. The two compete for root space.", "Before frost"],
+        ["Ferns in several pots", "p", "Dryopteris type. Divide or repot in spring if pot-bound."],
+        ["Hostas: two terracotta, a grey square pot, a tall zinc pot", "c", "All dormant. No labels or records; varieties to be matched to the original eight on the care sheet in spring, when the leaves emerge."],
+        ["Hydrangea macrophylla in a large black pot", "p", "Label read: ‘Hydrangea assorted’, so no variety name, 1.5 m by 1.5 m, sunny or part shade, sheltered, soil not very dry. Pink mophead, now fading to green-salmon. Very prolific in 2025, then cut hard back by someone else, and it was slow to start and carried few flowers in 2026, which is what removing a mophead’s flower buds does. Leave it unpruned this winter except for the dead head, which can come off in February or March back to a pair of fat buds, and then only remove a few of the oldest stems. The tag says cut back in late spring; do not follow that for this plant. Keep the compost moist in summer and mulch in spring.", "Feb to Mar"],
+        ["Bulbs in a round shallow pot and two troughs", "p", "Probably tulips from the Farmer Gracy order, though daffodils are possible: the thicker shoots could be either, and no records survive. Shoots are already up. A bulb was dug up, probably by a squirrel or mouse.", "Before frost"],
+        ["Trough with allium-like shoots", "p", "Tall, thin shoots; you are sure these are alliums. Confirm in spring when the flower heads open."],
+        ["Alocasia and aeonium (indoors)", "c", "Houseplants, covered separately."]
+      ] },
+    { id: "d", name: "Pergola and trellis", aspect: "Trellis line across the garden, built spring 2026",
+      note: "The green line on your satellite view, running from the garage wall to the right-hand boundary with the arch and steps. Each side has two roses and a wisteria, with different varieties either side. The two standards flank the entrance.",
+      items: [
+        ["Wisteria floribunda ‘Ito Koku Riu’", "c", "Label read; a young plant on a cane on the left side, planted in spring 2026, so in its first year. Now merging over the arch with the right-hand wisteria."],
+        ["Wisteria, right-hand (old original)", "p", "Recovered shoots of the old wisteria that covered the previous pergola, which rotted away and was replaced earlier in 2026. Variety unknown; trained to merge with the left-hand plant over the arch. Shoots from a regrown stock may be rootstock suckers, so flowering is uncertain."],
+        ["Rose ‘Tranquillity’", "c", "Healthy foliage on the left trellis."],
+        ["Rose ‘Climbing Chinatown’", "c", "Yellow stipple and small holes on lower leaves, probably mites or leafhoppers; low concern. Left side of the pergola, beside ‘Tranquillity’."],
+        ["Rose ‘Violet Blue’", "c", "Label read in the March photo: Homebase Signature Collection, 3 litre climbing rose, full sun, flowering May to October, with icons of about 100 cm and 400 cm. Planted spring 2026, on the right side of the pergola with the old rose."],
+        ["Old established rose on the pergola", "u", "Variety unknown, the fourth rose, on the right side with ‘Violet Blue’. Yellow flowers with red fringes, once prolific; probably set back by the loss of the rotted pergola and the old wisteria it grew through. Multicoloured climbers such as ‘Joseph’s Coat’ or ‘Masquerade’ fit the description, but this is a guess. Its bare stem rises almost 2 m before any leaves. Tying new stems in horizontally encourages flowering shoots lower down; renovation means cutting one or two of the oldest stems to near the base each late winter over about three years.", "Feb to Mar"],
+        ["Strap-leaved clumps at the trellis base", "g", "Broad, arching leaves with brown spots in the March photo: possibly Agapanthus, or iris with leaf spot. Summer flowers would settle it."],
+        ["Perennial sweet pea (Lathyrus latifolius)", "c", "Dying back for winter."],
+        ["Two Photinia-type standards in black pots", "g", "Probably P. x fraseri ‘Red Robin’. Planted in spring 2026, so in their first year: water through dry spells next summer and mulch in spring. Trim in March or April, not now.", "Mar to Apr"],
+        ["Standard rose in a grey ribbed pot", "c", "Variety unknown. Black spot: bin affected and fallen leaves. Prune in February or March.", "Before frost"],
+        ["Herb tub", "p", "Chives survived. The second plant may be curry plant, Helichrysum italicum; scratch and sniff."],
+        ["Windmill (Chusan) palm", "p", "Trachycarpus fortunei, with at least two fibrous trunks near the arch and the brick wall."],
+        ["Iris 2: gathered bearded irises, mixed and unnamed", "p", "Lifted from around the garden and replanted a few weeks ago in the bed between the path and the windmill palm trunk, which is sheltered and should drain well. Rhizomes were left exposed with the roots buried, and new side fans suggest they are taking. Varieties will show in May to June. Keep the tops of the rhizomes bare of mulch, and check that they grip after a few weeks.", "Check in December"]
+      ] },
+    { id: "e", name: "Right-hand bed", aspect: "Right side, facing the canal",
+      note: "The bed of tall climbers and perennials along the right-hand boundary, with the bird feeder, birdbath and corten bowl.",
+      items: [
+        ["Multi-trunk cordyline with the bird feeder", "c", ""],
+        ["Kiwi (Actinidia deliciosa type)", "p", "Inherited, over 20 years old, never flowered; provenance, sex and variety are unknown. Annual hard cutting removes the wood that carries flowers. Allow some of last summer’s side shoots to stay, shortened to about five buds beyond the last expected flower position, and watch whether it flowers in spring 2027. Untangle from the cordylines by the end of January and keep the framework.", "Dec to Jan"],
+        ["Fuchsia (magellanica type)", "p", "Inherited; still flowering in November. Cut back in spring."],
+        ["Honeysuckle (Lonicera) on the black trellis", "g", "Genus certain. Yellow-red flowers, mostly early with a few very late, and black berries; it was very tangled and overgrown, and what remains has regrown since spring 2026. Black berries rule out the common woodbine (L. periclymenum has red berries). Your 6 November photos show paired flowers on slender stalks from the leaf axils, creamy yellow with pink-red tubes, on densely hairy stems with glossy oval leaves, still flowering in November. That favours Japanese honeysuckle (Lonicera japonica) over Henry’s honeysuckle (L. henryi), which carries its flowers in terminal clusters and has smoother stems. Both are vigorous. Thin out dead and tangled stems after flowering, and keep the new growth tied in.", "After flowering"],
+        ["Hollyhocks (Alcea)", "c", "Between the fuchsia and the wooden mushroom. Two plants grew and flowered in 2026; about eight more roots (your count, uncertain) went in during the last two weeks, including the Farmer Gracy ‘Hollyhock Mix’ bare roots (5 ordered, colours various, 1.2 to 2.5 m, full sun). Speckled, holed leaves seen earlier: rust or flea beetle. Bin affected leaves, and cut old flowering stems to the ground after seeding. Keep crowns just at soil level and watch for slugs.", "Late winter"],
+        ["Iris ‘Black Tie Affair’ in a black glazed bowl", "c", "Label read: tall bearded iris with ruffled, deep purple-black petals, full sun, well-drained soil, about 90 cm. The rhizome sits on the soil surface, which is correct; keep its top exposed. Browning outer leaves are normal in autumn: pull or cut them off, and trim the fan to about 15 cm in late autumn to cut down on leaf spot. Flowering is normally May to June.", "Late autumn"],
+        ["Evening primrose (Oenothera)", "p", "Spent, on bamboo canes."],
+        ["Verbena bonariensis", "p", "Self-sows. Cut to the base in March.", "March"]
+      ] },
+    { id: "f", name: "Upper terrace and canal bank", aspect: "Beyond the trellis, up the steps",
+      note: "The patio, the deck and the brick-wall bed, the fence storage with pots, and the corner by the window wall. The willow and the birch stand either side of the plot at the canal end, with their crowns over the canal. Several items here come from video stills only.",
+      items: [
+        ["Large weeping willow, left of the plot at the canal end", "c", "One tree, cut back in the last two years. The long growth over the canal was cut right back. The long branch between the bank and the garage outbuilding, the lower round crown on the plan, is one you have cultivated on purpose for shade, so it should be kept and only dead or crossing wood taken out in winter. Its leaves cover the terrace in autumn."],
+        ["Birch, right of the plot at the canal end", "c", "Probably silver birch, possibly a weeping form: the pale trunk and fine drooping foliage in the view from across the canal fit. Species not confirmed."],
+        ["Aucuba japonica, speckled", "p", "In black planters on the deck and in the wall bed."],
+        ["Jerusalem cherry (Solanum pseudocapsicum)", "p", "In a wicker basket. Berries are poisonous; the plant is tender.", "Before frost"],
+        ["Rhododendron in the wall bed", "p", "Flower buds already set."],
+        ["Heuchera ‘Black Taffeta’", "c", "Label read."],
+        ["Horsetail, probably Equisetum hyemale", "p", "Growing in the ground and spreading; recently dug out. Cut every shoot as it appears."],
+        ["Euphorbia characias", "p", "Against the wall. The sap irritates skin and eyes."],
+        ["Artemisia, silver finely cut foliage", "p", "Against the shared NE boundary wall, behind the windmill palm trunk. Moved there from a pot elsewhere where it was not thriving. The close-up shows silver-grey, deeply cut feathery leaves, which fits Artemisia (candidates: ‘Powis Castle’, or an A. absinthium type such as ‘Lambrook Silver’); mugwort is not ruled out. Rue is unlikely. Artemisias prefer full sun and sharp drainage and sulk in shade or wet, so watch for legginess and rot; cut back by about half in April and expect regrowth from the base.", "April"],
+        ["Lupin, yellow cultivar", "c", "Label read; only dead stems show. Look for new shoots in March.", "March"],
+        ["Grey-green sprawling plant", "g", "Moved from a pot where it was not thriving; still weak. The close-up shows small, narrow-oval, smooth-edged leaves in tight tufts on thin pale woody stems. A crushed leaf has no discernible smell, which rules out savory, hyssop and thyme. A small-leaved hebe, such as a Hebe pinguifolia ‘Pagei’ type (grey-green, sprawling, white flowers in May or June), now fits best, but it is a guess and its flowers next year will settle it. Keep it in sharp drainage and sun, and trim lightly after flowering without cutting into bare wood."],
+        ["Bare twiggy planter", "g", "Broom if your memory of angled stems and yellow flowers is right. The stems are dry brown now; a scratch test shows whether they are alive.", "Spring"],
+        ["Fatsia japonica beside the window wall", "p", ""],
+        ["Red-orange maple near the Fatsia", "p", "Another Acer, by your account."],
+        ["Variegated Phormium", "g", "Perhaps ‘Cream Delight’ or ‘Yellow Wave’."],
+        ["Aloe or agave in a grey concrete pot", "g", "Now indoors."],
+        ["Begonias in plastic pots by the shelves", "g", "Probably a tender rhizomatous or rex type. You did not know of them. Move them to frost-free shelter.", "Before frost"],
+        ["Iceland poppy, Papaver ‘Garden Gnome’", "c", "Label read in a terracotta pot against the fence; no poppy foliage seen."],
+        ["Ferns in pots on pebbles, and Liriope or Ophiopogon tufts", "p", ""],
+        ["Zebra grass, Miscanthus sinensis ‘Zebrinus’", "p", "By the heron ornament. Your close-ups show broad arching blades with a white midrib and horizontal yellow bands across the green, which is the zebra-grass pattern; ‘Strictus’ is the upright alternative. Re-planted at the start of 2026 from a thick overgrown clump, cut to stubble, so it is still re-establishing. Cut back to 10 to 15 cm in February or March, divide every three to five years in April or May, and wear gloves because the blade edges are sharp.", "Feb to Mar"],
+        ["Round yellow planter: claw-like corms from Farmer Gracy", "p", "You recall a Farmer Gracy order of claw-like corms, and the strap-like shoots now showing are those corms sprouting. That matches Ranunculus ‘Amandine Porcelain’ (cream, pink, salmon and peach); the variety is not confirmed. The dark lump you pulled out of the soil may be one of the corms, dug up by a rodent. The tiny seedlings are unidentified and probably self-sown. Corms rot in wet compost and the leaves are frost-tender, so keep the pot sheltered and well drained, cover it with mesh against rodents, and fleece it in hard frost.", "Before frost"],
+        ["Terracotta pot with collapsed yellow strap leaves", "u", "A dormant bulb or perennial."],
+        ["Succulent in a dish on the table", "g", "Sempervivum or Echeveria type."]
+      ] }
+  ];
+
+  var OPEN = [
+    "Name of the old pergola rose: a photo in flower next summer would settle it.",
+    "Planting dates of the willow standard and the standard roses, which may be older.",
+    "Hosta varieties: no records, so matching waits for leaf in spring.",
+    "Confirmation of the front tree (blossom in April would settle Amelanchier).",
+    
+    "Flowers on the rock-bed cushions, and the pink-like tufts (to confirm as Dianthus). Bulb types in the thicker-shoot pots wait for spring.",
+    "The grey-green sprawler: odourless, so a hebe-type is the guess, and its flowers will tell. The Artemisia cultivar is a guess.",
+    "Iris 2: whether the replanted rhizomes have taken, and their colours in May to June. The kiwi’s sex will show only when it flowers, and the honeysuckle species needs a flower photo in summer.",
+    "Hollyhock colours: confirm in summer 2027, and which of the roots came from the bare-root order.",
+    "One tape-measured length, such as the pergola width or the garden width, to firm up the approximate scale bar."
+  ];
+
+  var filter = "all";
+
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+
+  function tally(z) {
+    var t = { c: 0, p: 0, g: 0, u: 0, a: 0 };
+    z.items.forEach(function (it) { t[it[1]]++; if (it[3]) t.a++; });
+    return t;
+  }
+  function letter(z) { return z.id.toUpperCase(); }
+
+  /* ---- Plan ----
+     Plan units x (0 at the left boundary, rising to the right as you face the canal)
+     and y (0 at the canal end, rising towards the street) come from the satellite
+     screenshot rotated so the canal is at the top. X and Y convert to SVG px. */
+  var X0 = 90, Y0 = 60, K = 1.2;
+  function X(x) { return +(X0 + K * x).toFixed(1); }
+  function Y(y) { return +(Y0 + K * y).toFixed(1); }
+  function P(arr) { return arr.map(function (p) { return X(p[0]) + "," + Y(p[1]); }).join(" "); }
+  function R(x1, y1, x2, y2, cls) { return '<rect class="' + cls + '" x="' + X(x1) + '" y="' + Y(y1) + '" width="' + (K * (x2 - x1)).toFixed(1) + '" height="' + (K * (y2 - y1)).toFixed(1) + '"/>'; }
+  function T(x, y, txt, cls, extra) { return '<text class="' + cls + '" x="' + X(x) + '" y="' + Y(y) + '"' + (extra || "") + '>' + txt + '</text>'; }
+
+  var ZP = {
+    a: [[[0, 645], [196, 645], [196, 860], [0, 821]]],
+    b: [[[0, 459], [46, 459], [46, 645], [0, 645]], [[82, 330], [106, 330], [106, 388], [82, 388]]],
+    c: [[[100, 405], [196, 405], [196, 459], [100, 459]]],
+    d: [[[80, 289], [196, 289], [196, 329], [80, 329]]],
+    e: [[[150, 333], [196, 333], [196, 402], [150, 402]]],
+    f: [[[0, 0], [232, 52], [196, 289], [82, 289], [82, 246], [0, 246]]]
+  };
+  var BADGE = { a: [[34, 722]], b: [[23, 552], [94, 360]], c: [[112, 432]], d: [[96, 300]], e: [[173, 368]], f: [[150, 150]] };
+
+  function drawMap() {
+    var s = "";
+    s += '<defs><marker id="ch" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 10 L5 0 L10 10 z" class="compass-head"/></marker>' +
+      '<pattern id="hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" stroke="var(--line)" stroke-width="2"/></pattern></defs>';
+    // canal and street
+    s += '<polygon class="water" points="0,0 420,0 420,' + Y(52) + ' ' + X(232) + ',' + Y(52) + ' ' + X(0) + ',' + Y(0) + ' 0,' + Y(0) + '"/>';
+    s += '<text class="band-label" x="12" y="32">CANAL (NORTH-WEST)</text>';
+    s += '<polygon class="road" points="0,' + Y(795) + ' ' + X(0) + ',' + Y(821) + ' ' + X(196) + ',' + Y(860) + ' 420,' + Y(885) + ' 420,1170 0,1170"/>';
+    s += '<text class="band-label" x="12" y="1150">STREET (SOUTH-EAST)</text>';
+    // plot outline
+    s += '<polygon class="ground" points="' + P([[0, 0], [232, 52], [196, 325], [196, 860], [0, 821]]) + '"/>';
+    // neighbours
+    s += R(-72, 440, -2, 700, "nb") + R(198, 400, 270, 640, "nb");
+    s += T(-37, 570, "Neighbour", "tlc", ' transform="rotate(-90 ' + X(-37) + ' ' + Y(570) + ')"');
+    s += T(234, 520, "Neighbour", "tlc", ' transform="rotate(90 ' + X(234) + ' ' + Y(520) + ')"');
+    // canopy over the canal
+    s += '<ellipse class="canopy" cx="' + X(25) + '" cy="' + Y(70) + '" rx="' + (K * 78) + '" ry="' + (K * 68) + '"/>';
+    s += '<ellipse class="canopy" cx="' + X(190) + '" cy="' + Y(110) + '" rx="' + (K * 42) + '" ry="' + (K * 48) + '"/>';
+    s += '<ellipse class="canopy" cx="' + X(0) + '" cy="' + Y(190) + '" rx="' + (K * 48) + '" ry="' + (K * 48) + '"/>';
+    s += T(22, 92, "Willow", "tlc") + T(22, 105, "(cut back)", "tlc") + T(0, 186, "Willow branch", "tlc") + T(0, 199, "kept for shade", "tlc") + T(190, 112, "Birch", "tlc");
+    // zone regions
+    ZONES.forEach(function (z) {
+      s += '<a class="znode" href="#z-' + z.id + '" aria-label="' + esc(letter(z) + ", " + z.name + ", " + z.items.length + " plants listed") + '">';
+      ZP[z.id].forEach(function (poly) { s += '<polygon class="zreg" points="' + P(poly) + '"/>'; });
+      BADGE[z.id].forEach(function (b, i) {
+        var r = i ? 9 : 11;
+        s += '<circle class="zb" cx="' + X(b[0]) + '" cy="' + Y(b[1]) + '" r="' + r + '"/>';
+        s += '<text class="zb-t" x="' + X(b[0]) + '" y="' + (Y(b[1]) + 4) + '"' + (i ? ' style="font-size:11px"' : '') + '>' + letter(z) + '</text>';
+      });
+      s += '</a>';
+    });
+    // house and garage
+    s += R(47, 459, 196, 642, "house") + T(121, 548, "House", "tlc");
+    s += '<line class="trellis" style="stroke-width:3" x1="' + X(108) + '" y1="' + Y(459) + '" x2="' + X(172) + '" y2="' + Y(459) + '"/>';
+    s += T(140, 476, "patio doors", "tlc");
+    s += R(5, 246, 82, 388, "feat") + T(43, 318, "Garage", "tlc");
+    // trellis, arch and steps
+    s += '<line class="trellis" x1="' + X(82) + '" y1="' + Y(316) + '" x2="' + X(122) + '" y2="' + Y(316) + '"/>';
+    s += '<line class="trellis" x1="' + X(146) + '" y1="' + Y(316) + '" x2="' + X(196) + '" y2="' + Y(316) + '"/>';
+    s += '<rect class="post" x="' + (X(122) - 3) + '" y="' + (Y(316) - 3) + '" width="6" height="6"/><rect class="post" x="' + (X(146) - 3) + '" y="' + (Y(316) - 3) + '" width="6" height="6"/>';
+    [292, 281, 270].forEach(function (yy) { s += '<line class="step" x1="' + X(124) + '" y1="' + Y(yy) + '" x2="' + X(144) + '" y2="' + Y(yy) + '"/>'; });
+    s += T(134, 258, "steps up", "tlc");
+    s += '<circle class="dot-s" cx="' + X(112) + '" cy="' + Y(338) + '" r="5"/><circle class="dot-s" cx="' + X(156) + '" cy="' + Y(338) + '" r="5"/>';
+    // round paving and gravel
+    s += '<circle class="paving" cx="' + X(128) + '" cy="' + Y(392) + '" r="' + (K * 30) + '"/>';
+    s += T(128, 391, "round paving", "tlc") + T(128, 403, "and gravel", "tlc");
+    // front garden
+    s += R(46, 650, 112, 830, "nb").replace('class="nb"', 'class="nb" fill="url(#hatch)"');
+    s += T(79, 760, "Drive", "tlc");
+    s += '<line class="trellis" style="stroke-width:3" x1="' + X(3) + '" y1="' + Y(662) + '" x2="' + X(44) + '" y2="' + Y(662) + '"/>' + T(23, 654, "gate", "tlc");
+    s += R(168, 700, 196, 820, "feat") + T(182, 762, "van", "tlc");
+    
+    s += '<ellipse class="rockbed" cx="' + X(150) + '" cy="' + Y(785) + '" rx="' + (K * 30) + '" ry="' + (K * 42) + '"/>';
+    s += '<circle class="tree" cx="' + X(150) + '" cy="' + Y(765) + '" r="' + (K * 14) + '"/>';
+    s += T(150, 828, "rock bed, tree", "tlc") + T(150, 840, "and flax", "tlc");
+    s += '<rect class="post" x="' + (X(96) - 4) + '" y="' + (Y(645) - 3) + '" width="8" height="6"/>' + T(96, 636, "door", "tlc");
+    // compass: north is 51 degrees clockwise from the top of the plan
+    s += '<g transform="translate(46 960) rotate(51)"><line class="compass" x1="0" y1="0" x2="0" y2="-38" marker-end="url(#ch)"/></g>';
+    s += '<text class="tl" x="62" y="936" style="font-weight:600;fill:var(--fg)!important">N</text>';
+    // approximate scale bar: 5 m at about 21.6 px per metre (from rough estimates of a 10 m garden width and a 7 m pergola)
+    s += '<g style="stroke:var(--fg);stroke-width:2;fill:none"><line x1="20" y1="1100" x2="128" y2="1100"/><line x1="20" y1="1094" x2="20" y2="1106"/><line x1="128" y1="1094" x2="128" y2="1106"/></g>';
+    s += '<text x="20" y="1122" style="font-size:11px;fill:var(--muted)">5 m (approximate, about 15% either way)</text>';
+    document.getElementById("map").innerHTML = s;
+  }
+
+  /* ---- Zone key ---- */
+  function drawKeys() {
+    document.getElementById("zkeys").innerHTML = ZONES.map(function (z) {
+      var t = tally(z), n = z.items.length;
+      var segs = ["c", "p", "g", "u"].map(function (k) { return t[k] ? '<span class="' + k + '" style="width:' + (100 * t[k] / n).toFixed(1) + '%"></span>' : ""; }).join("");
+      return '<a class="zkey" href="#z-' + z.id + '"><span class="badge" aria-hidden="true">' + letter(z) + '</span><span class="zk-name">' + esc(z.name) + '</span>' +
+        '<span class="zk-asp">' + esc(z.aspect) + '</span><span class="bar" aria-hidden="true">' + segs + '</span>' +
+        '<span class="zk-count">' + n + ' listed, ' + (t.g + t.u) + ' to check' + (t.a ? ", " + t.a + " job" + (t.a > 1 ? "s" : "") : "") + '</span></a>';
+    }).join("");
+  }
+
+  /* ---- Filters ---- */
+  function drawFilters() {
+    var total = 0, tot = { c: 0, p: 0, g: 0, u: 0, a: 0 };
+    ZONES.forEach(function (z) { var t = tally(z); total += z.items.length; ["c", "p", "g", "u", "a"].forEach(function (k) { tot[k] += t[k]; }); });
+    var defs = [
+      ["all", "All", total, ""],
+      ["c", "Confirmed", tot.c, "c"],
+      ["p", "Probable", tot.p, "p"],
+      ["g", "Guess", tot.g, "g"],
+      ["u", "Unidentified", tot.u, "u"],
+      ["act", "Has a job", tot.a, "a"]
+    ];
+    var box = document.getElementById("filters");
+    box.innerHTML = defs.map(function (d) {
+      return '<button type="button" data-f="' + d[0] + '" aria-pressed="' + (filter === d[0]) + '"><span class="dot ' + d[3] + '"></span>' + d[1] + ' (' + d[2] + ')</button>';
+    }).join("");
+    box.querySelectorAll("button").forEach(function (btn) {
+      btn.addEventListener("click", function () { filter = btn.getAttribute("data-f"); drawFilters(); drawZones(); });
+    });
+    document.getElementById("legend").textContent =
+      "Confirmed means a label was read or you told me. Probable means I am fairly sure from the photos. Guess means low confidence. Unidentified means no good candidate yet.";
+  }
+
+  /* ---- Zone tables ---- */
+  function show(it) {
+    if (filter === "all") return true;
+    if (filter === "act") return !!it[3];
+    return it[1] === filter;
+  }
+  function drawZones() {
+    var out = "";
+    ZONES.forEach(function (z) {
+      var rows = z.items.filter(show);
+      out += '<section class="zone" id="z-' + z.id + '">';
+      out += '<div class="zone-head"><span class="badge" aria-hidden="true">' + letter(z) + '</span><h2>' + esc(z.name) + '</h2><span class="asp">' + esc(z.aspect) + '</span></div>';
+      out += '<p class="zone-note">' + esc(z.note) + '</p>';
+      if (!rows.length) {
+        out += '<div class="tablewrap"><p class="empty">Nothing in this zone matches the filter.</p></div>';
+      } else {
+        out += '<div class="tablewrap"><table><thead><tr><th scope="col">Plant</th><th scope="col">Confidence</th><th scope="col">Notes and jobs</th></tr></thead><tbody>';
+        rows.forEach(function (it) {
+          out += '<tr><td class="what">' + esc(it[0]) + '</td>' +
+            '<td class="conf"><span class="chip ' + it[1] + '"><span class="dot ' + it[1] + '"></span>' + STATUS[it[1]].label + '</span></td>' +
+            '<td>' + esc(it[2]) + (it[3] ? '<span class="act">' + esc(it[3]) + '</span>' : '') + '</td></tr>';
+        });
+        out += '</tbody></table></div>';
+      }
+      out += '</section>';
+    });
+    document.getElementById("zones").innerHTML = out;
+  }
+
+  document.getElementById("openq").innerHTML = OPEN.map(function (q) { return "<li>" + esc(q) + "</li>"; }).join("");
+  drawMap();
+  drawKeys();
+  drawFilters();
+  drawZones();
+})();
+</script>
